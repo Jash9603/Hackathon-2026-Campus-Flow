@@ -8,6 +8,7 @@ import Register from './pages/Register'; // Added Register import
 import Events from './pages/Events'; // Added Events import
 import EventDetails from './pages/EventDetails'; // Added EventDetails import
 import Dashboard from './pages/Dashboard'; // Import Dashboard
+import AdminDashboard from './pages/AdminDashboard'; // Import AdminDashboard
 import CreateEvent from './pages/CreateEvent'; // Import CreateEvent
 import ManageRegistrations from './pages/ManageRegistrations'; // Import ManageRegistrations
 import StudentProfile from './pages/StudentProfile'; // Import StudentProfile
@@ -79,6 +80,10 @@ function App() {
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/create-event" element={<CreateEvent />} />
                   <Route path="/events/:eventId/registrations" element={<ManageRegistrations />} />
+                </Route>
+
+                <Route element={<ProtectedRoute roles={['admin']} />}>
+                  <Route path="/admin" element={<AdminDashboard />} />
                 </Route>
 
               </Routes>

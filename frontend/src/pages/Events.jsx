@@ -7,6 +7,7 @@ const Events = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('all'); // all, ongoing, upcoming
+    const [searchQuery, setSearchQuery] = useState(''); // Add search state
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -23,6 +24,17 @@ const Events = () => {
     }, []);
 
     const filteredEvents = events.filter(event => {
+        // Search filter
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            const matchesSearch =
+                event.title.toLowerCase().includes(query) ||
+                event.description.toLowerCase().includes(query) ||
+                event.location.toLowerCase().includes(query);
+            if (!matchesSearch) return false;
+        }
+
+        // Status filter
         if (filter === 'all') return true;
         if (filter === 'ongoing') return event.status === 'ongoing';
         // simple check for upcoming
@@ -45,6 +57,8 @@ const Events = () => {
                     <input
                         type="text"
                         placeholder="SEARCH_QUERY..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="bg-transparent border-none outline-none text-retro-cyan font-mono text-sm w-48"
                     />
                 </div>

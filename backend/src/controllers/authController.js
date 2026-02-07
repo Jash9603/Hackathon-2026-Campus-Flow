@@ -23,12 +23,22 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new Error('User already exists');
     }
 
+    // Security: Only allow student or organizer registration
+    // Admin accounts must be created manually via seed script
+    const allowedRoles = ['student', 'organizer'];
+    const userRole = role || 'student';
+
+    if (!allowedRoles.includes(userRole)) {
+        res.status(403);
+        throw new Error('Invalid role. Only student and organizer roles are allowed for registration.');
+    }
+
     // Create user
     const user = await User.create({
         name,
         email,
         password,
-        role: role || 'student', // Default to student if not specified
+        role: userRole,
     });
 
     if (user) {
